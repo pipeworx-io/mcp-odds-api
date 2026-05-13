@@ -1,0 +1,18 @@
+{
+  "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
+  "name": "io.github.pipeworx-io/odds-api",
+  "title": "Odds Api",
+  "description": "The Odds API MCP — sportsbook odds across 70+ books, 30+ leagues",
+  "version": "0.1.0",
+  "websiteUrl": "https://pipeworx.io/packs/odds-api",
+  "repository": {
+    "url": "https://github.com/pipeworx-io/mcp-odds-api",
+    "source": "github"
+  },
+  "remotes": [
+    {
+      "type": "streamable-http",
+      "url": "https://gateway.pipeworx.io/odds-api/mcp"
+    }
+  ]
+}
