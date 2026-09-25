@@ -2,7 +2,7 @@
 
 The Odds API MCP — sportsbook odds across 70+ books for 30+ sports leagues (NFL, NBA, MLB, NHL, soccer, MMA, golf, tennis, esports, cricket, ...).
 
-Part of [Pipeworx](https://pipeworx.io) — an MCP gateway connecting AI agents to 1476+ live data sources.
+Part of [Pipeworx](https://pipeworx.io) — an MCP gateway connecting AI agents to 1679+ live data sources.
 
 ## Tools
 
@@ -18,13 +18,23 @@ Part of [Pipeworx](https://pipeworx.io) — an MCP gateway connecting AI agents 
 - **Platform key:** gateway env `PLATFORM_ODDS_API_KEY`
 - **BYO:** `?_apiKey=<key>` after registering at https://the-odds-api.com/
 
-Free tier: 500 requests/month. Each odds-payload market counts as 1 request. `list_sports` and
-`odds_api_quota` are free — they do not draw down the balance.
+Free tier: 500 requests/month. Each odds-payload market counts as 1 request. `list_sports`,
+`get_events` and `odds_api_quota` are free — measured 2026-09-01, they do not draw down the
+balance.
 
-When the month's credits are spent, the metered tools return `upstream_throttled` and a hint to
-bring your own key. Upstream answers an exhausted balance with **HTTP 401**, the same status as a
-bad key, so read the message rather than the status: `odds_api_quota` tells the two apart.
-Credits reset on the plan anniversary, not on the 1st of the month.
+When the month's credits are spent, the metered tools (`get_odds`, `get_event_odds`, `get_scores`)
+return `upstream_throttled` and a hint to bring your own key. Upstream answers an exhausted balance
+with **HTTP 401**, the same status as a bad key, so read the message rather than the status:
+`odds_api_quota` tells the two apart. Credits reset on the plan anniversary, not on the 1st of the
+month, and nothing announces the reset.
+
+`odds_api_quota` also adds `error: "account_limited"` and a plain-English `message` once the
+balance hits zero. That is what makes a spent plan visible: the monitor's platform-key board probes
+this pack through `odds_api_quota` precisely because it is free to call *and* able to fail. The
+board previously probed `get_events`, which keeps answering 200 on a zero balance — so the four
+metered tools were dark for eleven days in August 2026 with nothing reporting it. The wording of
+that message is a contract with `workers/monitor`; `tests/odds-api-quota-visibility.test.ts`
+holds the two together.
 
 ## Data source
 
@@ -74,9 +84,39 @@ directly, instead of just this one's:
 }
 ```
 
-Both URLs reach the same gateway and the same 1476+ data sources. The
+Both URLs reach the same gateway and the same 1679+ data sources. The
 only difference is which pack's tools are listed **directly**; `ask_pipeworx`
 reaches all of them from either one.
+
+## No MCP client? Call it over HTTP
+
+Our odds-api key is reserved for paid accounts, so an anonymous call to `POST https://gateway.pipeworx.io/v1/tools/odds_api_list_sports` needs your own key passed as `_apiKey` alongside the arguments. Inspect any tool: `GET https://gateway.pipeworx.io/v1/tools/odds_api_list_sports`. Find one: `POST https://gateway.pipeworx.io/v1/tools/search_packs` with `{"query":"..."}`.
+
+## Standalone (no gateway account)
+
+This package also runs as a local stdio MCP server — no Pipeworx account, no
+gateway round-trip:
+
+```json
+{
+  "mcpServers": {
+    "odds-api": {
+      "command": "npx",
+      "args": ["-y", "@pipeworx/mcp-odds-api"]
+    }
+  }
+}
+```
+
+Or run it directly to confirm it starts:
+
+```bash
+npx -y @pipeworx/mcp-odds-api
+```
+
+It speaks MCP over stdin/stdout and answers `initialize`/`tools/list`/`tools/call`
+for **only** this pack's tools — none of the shared meta-tools the gateway
+connection above adds. Same source, same tools, no ask_pipeworx routing.
 
 ## Using with ask_pipeworx
 
@@ -97,7 +137,3 @@ The gateway picks the right tool and fills the arguments automatically.
 ## License
 
 MIT
-
-## No MCP client? Call it over HTTP
-
-Our odds-api key is reserved for paid accounts, so an anonymous call to `POST https://gateway.pipeworx.io/v1/tools/odds_api_list_sports` needs your own key passed as `_apiKey` alongside the arguments. Inspect any tool: `GET https://gateway.pipeworx.io/v1/tools/odds_api_list_sports`. Find one: `POST https://gateway.pipeworx.io/v1/tools/search_packs` with `{"query":"..."}`.
