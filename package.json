@@ -1,6 +1,6 @@
 {
   "name": "@pipeworx/mcp-odds-api",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "description": "The Odds API MCP — sportsbook odds across 70+ books, 30+ leagues",
   "type": "module",
   "main": "src/index.ts",
@@ -26,7 +26,7 @@
     "@cloudflare/workers-types": "^4.20260405.1"
   },
   "pipeworx": {
-    "sourceHash": "v1-27bcb4076dd5f3dd0444b11aed387a41d215fc64dcd0060b9d6ed64fe58923a7",
-    "sourceCommit": "97740c6ee04c8acbfe7dddcacfde9e88ff2b9ca0"
+    "sourceHash": "v1-e5b94afb70b4668a1d3a3a7a9dae1273139285c616299a8f04beb03d3fea7571",
+    "sourceCommit": "f54ad77e789f27fe393978f9c080b5b18c87bb4f"
   }
 }
