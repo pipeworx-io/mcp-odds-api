@@ -1,0 +1,132 @@
+[
+  {
+    "name": "list_sports",
+    "description": "List available sports/leagues. By default returns only in-season; pass all=true to include out-of-season.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "all": {
+          "type": "boolean",
+          "description": "Include out-of-season sports (default false)"
+        }
+      }
+    }
+  },
+  {
+    "name": "get_odds",
+    "description": "Current odds for upcoming + live events in a league. Each market type costs 1 quota credit per region per call — pick markets carefully.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "sport_key": {
+          "type": "string",
+          "description": "Sport key from list_sports, e.g. \"americanfootball_nfl\""
+        },
+        "regions": {
+          "type": "string",
+          "description": "us | uk | eu | au — comma-sep (default us)"
+        },
+        "markets": {
+          "type": "string",
+          "description": "h2h | spreads | totals | outrights — comma-sep (default h2h)"
+        },
+        "odds_format": {
+          "type": "string",
+          "description": "american (default) | decimal"
+        },
+        "date_format": {
+          "type": "string",
+          "description": "iso (default) | unix"
+        },
+        "bookmakers": {
+          "type": "string",
+          "description": "Comma-sep bookmaker keys (e.g. \"draftkings,fanduel\") to restrict"
+        },
+        "event_ids": {
+          "type": "string",
+          "description": "Restrict to specific event IDs (comma-sep)"
+        }
+      },
+      "required": [
+        "sport_key"
+      ]
+    }
+  },
+  {
+    "name": "get_event_odds",
+    "description": "Odds for a single event — allows richer markets (player props, alt lines). Higher quota cost per call.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "sport_key": {
+          "type": "string"
+        },
+        "event_id": {
+          "type": "string"
+        },
+        "regions": {
+          "type": "string"
+        },
+        "markets": {
+          "type": "string",
+          "description": "Includes player_props_* markets for some leagues"
+        },
+        "odds_format": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "sport_key",
+        "event_id"
+      ]
+    }
+  },
+  {
+    "name": "get_scores",
+    "description": "Live + recent final scores. Costs 2 requests per call.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "sport_key": {
+          "type": "string"
+        },
+        "days_from": {
+          "type": "number",
+          "description": "1-3 days from now (default 1)"
+        }
+      },
+      "required": [
+        "sport_key"
+      ]
+    }
+  },
+  {
+    "name": "get_events",
+    "description": "Upcoming + live events for a league (without odds — useful to discover event IDs).",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "sport_key": {
+          "type": "string"
+        },
+        "date_format": {
+          "type": "string"
+        },
+        "event_ids": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "sport_key"
+      ]
+    }
+  },
+  {
+    "name": "odds_api_quota",
+    "description": "Monthly request credits left and used on the key serving this call, read from The Odds API usage headers. Says whether the odds and scores tools can return data right now and how large the plan is.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {}
+    }
+  }
+]
