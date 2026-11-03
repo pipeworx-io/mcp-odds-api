@@ -1,6 +1,6 @@
 {
   "name": "@pipeworx/mcp-odds-api",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "The Odds API MCP — sportsbook odds across 70+ books, 30+ leagues",
   "type": "module",
   "main": "lib/index.js",
@@ -27,7 +27,7 @@
     "mode": "gateway",
     "slug": "odds-api",
     "gatewaySlug": "odds-api",
-    "sourceHash": "v1-1b0aafb6b7a19fc74181c42082f5f9c96e0fb790239f1d722a3d5687ff0889cd",
-    "sourceCommit": "b2c4383545bb35171d0ada2beb1c9c7168ea175e"
+    "sourceHash": "v1-a365653ada7ba8a9630be56c8d1c8928b817109879699ef70ea802e7bdb242d7",
+    "sourceCommit": "bed7faa04e7276899b5e3870ef11c98625371f2b"
   }
 }
